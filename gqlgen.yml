@@ -1,0 +1,32 @@
+schema:
+  - ent.graphql
+  - graph/*.graphqls
+
+exec:
+  filename: graph/generated/generated.go
+  package: generated
+
+resolver:
+  layout: follow-schema
+  dir: graph
+  package: graph
+
+omit_slice_element_pointers: true
+
+autobind:
+  - "github.com/crossworth/nextjs-graphql-gqlgen-ent/ent"
+  - "github.com/crossworth/nextjs-graphql-gqlgen-ent/ent/user"
+  - "github.com/crossworth/nextjs-graphql-gqlgen-ent/ent/post"
+
+models:
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.ID
+      - github.com/99designs/gqlgen/graphql.Int
+      - github.com/99designs/gqlgen/graphql.Int64
+      - github.com/99designs/gqlgen/graphql.Int32
+  Int:
+    model:
+      - github.com/99designs/gqlgen/graphql.Int
+      - github.com/99designs/gqlgen/graphql.Int64
+      - github.com/99designs/gqlgen/graphql.Int32

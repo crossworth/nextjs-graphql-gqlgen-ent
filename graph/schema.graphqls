@@ -1,0 +1,91 @@
+directive @goField(forceResolver: Boolean, name: String) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
+
+scalar Time
+scalar Cursor
+
+enum PostOrderField {
+    TITLE
+}
+
+enum OrderDirection {
+    ASC
+    DESC
+}
+
+input PostOrder {
+    direction: OrderDirection!
+    field: PostOrderField
+}
+
+enum UserOrderField {
+    NAME
+}
+
+input UserOrder {
+    direction: OrderDirection!
+    field: UserOrderField
+}
+
+type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: Cursor
+    endCursor: Cursor
+}
+
+type Post {
+    id: ID!
+    title: String!
+    content: String!
+    user: User! @goField(forceResolver: true)
+}
+
+type User {
+    id: ID!
+    name: String!
+    #    posts: [Post!]! @goField(forceResolver: true)
+}
+
+type PostConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [PostEdge!]!
+}
+
+type PostEdge {
+    node: Post!
+    cursor: Cursor!
+}
+
+type UserConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [UserEdge!]!
+}
+
+type UserEdge {
+    node: User!
+    cursor: Cursor!
+}
+
+type Query {
+    user(id: ID!): User!
+    post(id: ID!): Post!
+    posts(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: PostOrder, where: PostWhereInput): PostConnection!
+    users(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: UserOrder, where: UserWhereInput): UserConnection!
+}
+
+input CreateUserInput {
+    name: String!
+}
+
+input CreatePostInput {
+    title: String!
+    content: String!
+    author: ID!
+}
+
+type Mutation {
+    createUser(input: CreateUserInput!): User!
+    createPost(input: CreatePostInput!): Post!
+}
